@@ -88,79 +88,18 @@ function Pawn (parent, side, x, y) {
   this.possible = [];
   this.search = function(trgt) {
     
-    //right
-    for (let i = this.x + 1; i < this.parent.cols; i++) {
-      if (this.parent.tiles[i][this.y] == 0) {
-        this.possible.push([i, this.y]);
-      } else {
-      break;
+    let dirs = [[1, 1], [1, 0], [1, -1], [-1, 1], [-1, 0], [-1, -1], [0, 1], [0, -1]];
+    
+    for (let dir of dirs) {
+      for (let k = createVector(this.x + dir[0], this.y + dir[1]); k.x >= 0 && k.x < this.parent.cols && k.y >= 0 && k.y < parent.rows ; k.add(dir[0], dir[1])) {
+        if (this.parent.tiles[k.x][k.y] == 0) {
+          this.possible.push([k.x, k.y]);
+        } else {
+          break;
+        }
       }
     }
-    
-    //left
-    for (let i = this.x - 1; i >= 0; i--) {
-      if (this.parent.tiles[i][this.y] == 0) {
-        this.possible.push([i, this.y]);
-      } else {
-      break;
-      }
-    }
-    
-    //down
-    for (let j = this.y + 1; j < this.parent.rows; j++) {
-      if (this.parent.tiles[this.x][j] == 0) {
-        this.possible.push([this.x, j]);
-      } else {
-      break;
-      }
-    }
-    
-    //up
-    for (let j = this.y - 1; j >= 0; j--) {
-      if (this.parent.tiles[this.x][j] == 0) {
-        this.possible.push([this.x, j]);
-      } else {
-      break;
-      }
-    }
-    
-    //down right
-    for (let k = createVector(this.x + 1, this.y + 1); k.x < parent.cols && k.y < parent.rows ; k.add(1, 1)) {
-      if (this.parent.tiles[k.x][k.y] == 0) {
-        this.possible.push([k.x, k.y]);
-      } else {
-      break;
-      }
-    }
-    
-    //down left
-    for (let k = createVector(this.x - 1, this.y + 1); k.x >= 0 && k.y < parent.rows ; k.add(-1, 1)) {
-      if (this.parent.tiles[k.x][k.y] == 0) {
-        this.possible.push([k.x, k.y]);
-      } else {
-      break;
-      }
-    }
-    
-    //up left
-    for (let k = createVector(this.x - 1, this.y - 1); k.x >= 0 && k.y >= 0 ; k.add(-1, -1)) {
-      if (this.parent.tiles[k.x][k.y] == 0) {
-        this.possible.push([k.x, k.y]);
-      } else {
-      break;
-      }
-    }
-    
-    //up right
-    for (let k = createVector(this.x + 1, this.y - 1); k.x < parent.cols && k.y >= 0 ; k.add(1, -1)) {
-      if (this.parent.tiles[k.x][k.y] == 0) {
-        this.possible.push([k.x, k.y]);
-      } else {
-      break;
-      }
-    }
-    
-    
+
     //highlight
     this.parent[trgt].push(...this.possible);
     
@@ -189,7 +128,6 @@ function Pawn (parent, side, x, y) {
 var main = function (brd, m_x, m_y) {
   let i = Math.floor(m_x / tilesize);
   let j = Math.floor(m_y / tilesize);
-  console.log(i, j)
   switch (brd.state) {
     
     case 'base':
